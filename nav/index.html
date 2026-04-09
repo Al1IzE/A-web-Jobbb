@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的不是很全能导航 | 6666330.xyz</title>
+    <style>
+        :root { --bg: #0f1115; --card-bg: #1a1d23; --text: #e0e6ed; --accent: #0070f3; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .section-title { border-left: 4px solid var(--accent); padding-left: 10px; margin: 2rem 0 1rem; font-size: 1.2rem; color: var(--accent); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        .nav-item { background: var(--card-bg); padding: 1rem; border-radius: 12px; text-decoration: none; color: var(--text); text-align: center; transition: 0.3s; border: 1px solid #2d333b; }
+        .nav-item:hover { transform: translateY(-5px); border-color: var(--accent); background: #21262d; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛠️ 理塘导航</h1>
+        <p>常用的生产力工具与兴趣站点</p>
+    </div>
+
+    <div class="section-title">赛车与竞技</div>
+    <div class="grid">
+        <a href="https://www.formula1.com" class="nav-item" target="_blank"><span class="icon">🏎️</span>F1 官网</a>
+        <a href="https://www.racedepartment.com" class="nav-item" target="_blank"><span class="icon">🕹️</span>RaceDepartment (Mod)</a>
+        <a href="https://www.warhammer.com" class="nav-item" target="_blank"><span class="icon">🛡️</span>Warhammer</a>
+    </div>
+
+    <div class="section-title">生产力与学习</div>
+    <div class="grid">
+        <a href="https://github.com" class="nav-item" target="_blank"><span class="icon">🐱</span>GitHub</a>
+        <a href="https://dash.cloudflare.com" class="nav-item" target="_blank"><span class="icon">☁️</span>Cloudflare</a>
+        <a href="https://chatgpt.com" class="nav-item" target="_blank"><span class="icon">🤖</span>AI Assistant</a>
+    </div>
+
+    <div class="section-title">运动与生活</div>
+    <div class="grid">
+        <a href="https://www.bilibili.com" class="nav-item" target="_blank"><span class="icon">📺</span>Bilibili</a>
+        <a href="#" class="nav-item"><span class="icon">🏋️</span>健身记录</a>
+    </div>
+
+    <div style="text-align: center; margin-top: 4rem; opacity: 0.5;">
+        <a href="/" style="color: white; text-decoration: none;">← 返回首页</a>
+    </div>
+</body>
+</html>
