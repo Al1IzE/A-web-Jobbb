@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-	<mete charset="UTF-8"></mete>
-	<title>五子棋</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>五子棋 | 6666330.xyz</title>
+    
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <style>
+        /* 复用 2048 的蓝色悬浮返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            padding: 8px 15px;
+            background: #1e1e1e;
+            color: #0070f3;
+            text-decoration: none;
+            border-radius: 6px;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            border: 1px solid #0070f3;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: #0070f3;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 112, 243, 0.5);
+        }
+
+        /* 让棋盘居中，更有竞技感 */
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            background-color: #fff; /* 棋盘通常是亮的，方便看清黑白子 */
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 4px;
+            cursor: pointer;
+            max-width: 95vw; /* 手机上自动缩放 */
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-	<canvas id="chess" width="450px" height="450px"></canvas>
-	<script type="text/javascript" src="js/script.js"></script>
+    <a href="/games" class="back-btn">← 返回大厅</a>
+
+    <canvas id="chess" width="450" height="450"></canvas>
+
+    <script type="text/javascript" src="js/script.js"></script>
 </body>
 </html>
