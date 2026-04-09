@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2048 | A11IzE 的秘密基地</title>
     
     <link rel="stylesheet" type="text/css" href="2048.css"/>
@@ -12,37 +12,29 @@
     <script type="text/javascript" src="main2048.js"></script>
 
     <style>
-        /* 1. 基础样式优化 */
-        body { background: #faf8ef; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
+        /* 全局背景色保持一致 */
+        body { background: #faf8ef; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; touch-action: none; }
         
         .back-btn {
             position: fixed; top: 15px; left: 15px; padding: 8px 15px; background: #8f7a66; color: white;
-            text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 1000;
+            text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 2000;
         }
 
-        /* 2. 核心适配：让游戏盘随屏幕宽度自动缩放 */
+        /* 核心适配方案：缩放容器 */
+        #game-container {
+            transform-origin: top center;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 移动端缩放逻辑 */
         @media screen and (max-width: 500px) {
-            header h1 { font-size: 40px; margin: 20px 0 10px; }
-            #newgamebutton { width: 100px; padding: 10px; font-size: 16px; }
-            
-            #grid-container {
-                width: 280px !important;  /* 强制缩小容器 */
-                height: 280px !important;
-                padding: 10px !important;
-                margin: 20px auto !important;
-                border-radius: 6px !important;
-            }
-            .grid-cell {
-                width: 60px !important;   /* 强制缩小格子 */
-                height: 60px !important;
-                border-radius: 4px !important;
-            }
-            /* 动态生成的数字方块也要缩放 */
-            .number-cell {
-                width: 60px !important;
-                height: 60px !important;
-                line-height: 60px !important;
-                font-size: 25px !important;
+            #game-container {
+                /* 如果手机屏幕太窄，自动计算缩放比例（比如 320/500 = 0.64） */
+                transform: scale(0.7); /* 你可以根据效果在 0.6 到 0.8 之间调整这个数值 */
+                margin-top: 60px; /* 留出返回按钮的位置 */
             }
         }
     </style>
@@ -51,33 +43,35 @@
 <body>
     <a href="/games" class="back-btn">← 返回</a>
 
-    <header>
-        <h1>2048</h1>
-        <a href="javascript:newgame();" id="newgamebutton">New Game</a>
-        <p>Score: <span id="score">0</span></p>
-    </header>
+    <div id="game-container">
+        <header>
+            <h1>2048</h1>
+            <a href="javascript:newgame();" id="newgamebutton">New Game</a>
+            <p>Score: <span id="score">0</span></p>
+        </header>
 
-    <div id="grid-container">
-        <div class="grid-cell" id="grid-cell-0-0"></div>
-        <div class="grid-cell" id="grid-cell-0-1"></div>
-        <div class="grid-cell" id="grid-cell-0-2"></div>
-        <div class="grid-cell" id="grid-cell-0-3"></div>
-        <div class="grid-cell" id="grid-cell-1-0"></div>
-        <div class="grid-cell" id="grid-cell-1-1"></div>
-        <div class="grid-cell" id="grid-cell-1-2"></div>
-        <div class="grid-cell" id="grid-cell-1-3"></div>
-        <div class="grid-cell" id="grid-cell-2-0"></div>
-        <div class="grid-cell" id="grid-cell-2-1"></div>
-        <div class="grid-cell" id="grid-cell-2-2"></div>
-        <div class="grid-cell" id="grid-cell-2-3"></div>
-        <div class="grid-cell" id="grid-cell-3-0"></div>
-        <div class="grid-cell" id="grid-cell-3-1"></div>
-        <div class="grid-cell" id="grid-cell-3-2"></div>
-        <div class="grid-cell" id="grid-cell-3-3"></div>
+        <div id="grid-container">
+            <div class="grid-cell" id="grid-cell-0-0"></div>
+            <div class="grid-cell" id="grid-cell-0-1"></div>
+            <div class="grid-cell" id="grid-cell-0-2"></div>
+            <div class="grid-cell" id="grid-cell-0-3"></div>
+            <div class="grid-cell" id="grid-cell-1-0"></div>
+            <div class="grid-cell" id="grid-cell-1-1"></div>
+            <div class="grid-cell" id="grid-cell-1-2"></div>
+            <div class="grid-cell" id="grid-cell-1-3"></div>
+            <div class="grid-cell" id="grid-cell-2-0"></div>
+            <div class="grid-cell" id="grid-cell-2-1"></div>
+            <div class="grid-cell" id="grid-cell-2-2"></div>
+            <div class="grid-cell" id="grid-cell-2-3"></div>
+            <div class="grid-cell" id="grid-cell-3-0"></div>
+            <div class="grid-cell" id="grid-cell-3-1"></div>
+            <div class="grid-cell" id="grid-cell-3-2"></div>
+            <div class="grid-cell" id="grid-cell-3-3"></div>
+        </div>
     </div>
 
     <script>
-        // 3. 手机端触摸滑动脚本 (Swipe Detection)
+        // 滑动监听脚本保持不变
         var startx, starty;
         document.addEventListener('touchstart', function(e) {
             startx = e.touches[0].pageX;
@@ -90,14 +84,11 @@
             var deltax = endx - startx;
             var deltay = endy - starty;
 
-            // 忽略太短的点击
             if (Math.abs(deltax) < 30 && Math.abs(deltay) < 30) return;
 
             if (Math.abs(deltax) >= Math.abs(deltay)) {
-                // 水平滑动
                 if (deltax > 0) moveRight(); else moveLeft();
             } else {
-                // 垂直滑动
                 if (deltay > 0) moveDown(); else moveUp();
             }
         }, false);
