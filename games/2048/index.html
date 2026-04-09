@@ -71,27 +71,52 @@
     </div>
 
     <script>
-        // 滑动监听脚本保持不变
-        var startx, starty;
-        document.addEventListener('touchstart', function(e) {
-            startx = e.touches[0].pageX;
-            starty = e.touches[0].pageY;
-        }, false);
+    // 模拟键盘事件的函数
+    function simulateKey(keyCode) {
+        var event = $.Event("keydown");
+        event.keyCode = keyCode;
+        $(document).trigger(event);
+    }
 
-        document.addEventListener('touchend', function(e) {
-            var endx = e.changedTouches[0].pageX;
-            var endy = e.changedTouches[0].pageY;
-            var deltax = endx - startx;
-            var deltay = endy - starty;
+    var startx, starty;
 
-            if (Math.abs(deltax) < 30 && Math.abs(deltay) < 30) return;
+    // 监听触摸开始
+    document.addEventListener('touchstart', function(e) {
+        startx = e.touches[0].pageX;
+        starty = e.touches[0].pageY;
+    }, {passive: false});
 
-            if (Math.abs(deltax) >= Math.abs(deltay)) {
-                if (deltax > 0) moveRight(); else moveLeft();
+    // 监听触摸结束
+    document.addEventListener('touchend', function(e) {
+        var endx = e.changedTouches[0].pageX;
+        var endy = e.changedTouches[0].pageY;
+        var deltax = endx - startx;
+        var deltay = endy - starty;
+
+        // 滑动距离太短就不触发（防止误触）
+        if (Math.abs(deltax) < 30 && Math.abs(deltay) < 30) return;
+
+        if (Math.abs(deltax) >= Math.abs(deltay)) {
+            // 水平滑动
+            if (deltax > 0) {
+                simulateKey(39); // 右方向键
             } else {
-                if (deltay > 0) moveDown(); else moveUp();
+                simulateKey(37); // 左方向键
             }
-        }, false);
-    </script>
+        } else {
+            // 垂直滑动
+            if (deltay > 0) {
+                simulateKey(40); // 下方向键
+            } else {
+                simulateKey(38); // 上方向键
+            }
+        }
+    }, {passive: false});
+
+    // 阻止手机浏览器默认的下拉刷新等行为
+    document.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+    }, {passive: false});
+</script>
 </body>
 </html>
