@@ -1,80 +1,109 @@
-<canvas id="gc" width="400" height="400"></canvas>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>贪吃蛇 | 6666330.xyz</title>
+    <style>
+        body { background: #121212; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        
+        /* 蓝色悬浮返回按钮 */
+        .back-btn {
+            position: fixed; top: 15px; left: 15px; padding: 8px 15px; background: #1e1e1e; color: #0070f3;
+            text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold; border: 1px solid #0070f3;
+            z-index: 1000; transition: 0.3s;
+        }
+        .back-btn:hover { background: #0070f3; color: white; box-shadow: 0 0 10px rgba(0, 112, 243, 0.5); }
 
-<script type="text/javascript">
-	window.onload = function(){
-		canv = document.getElementById("gc");
-		ctx = canv.getContext("2d");
-		document.addEventListener("keydown",keyPush);
-		setInterval(game,1000/15);
-	}
+        canvas { border: 2px solid #333; box-shadow: 0 0 20px rgba(0,0,0,0.5); background: #000; max-width: 90vw; max-height: 70vh; }
 
-	px = py = 10 ; 
-	gs = tc = 20 ; 
-	ax = ay = 15;
-	zx = ay = 15 ; 
-	xv= yv = 0 ; 
+        /* 手机端虚拟按键样式 */
+        .controls { display: grid; grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(2, 60px); gap: 10px; margin-top: 20px; }
+        .btn { width: 60px; height: 60px; background: #252525; border: 1px solid #444; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #0070f3; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .btn:active { background: #0070f3; color: white; }
+        .up { grid-column: 2; }
+        .left { grid-column: 1; grid-row: 2; }
+        .down { grid-column: 2; grid-row: 2; }
+        .right { grid-column: 3; grid-row: 2; }
 
-	trail = [];
-	tail = 5 ;
-	function game(){
-		px+=xv ; 
-		py+=yv ; 
-		if(px<0){
-			px = tc-1 ; 
-		}
-		if(px>tc-1){
-			px = 0 ;
-		}
-		if(py<0){
-			py = tc-1 ;
-		}
-		if(py>tc-1){
-			py = 0 ;
-		}
+        @media (min-width: 800px) { .controls { display: none; } } /* 电脑端隐藏按键 */
+    </style>
+</head>
+<body>
+    <a href="/games" class="back-btn">← 返回大厅</a>
 
-		ctx.fillStyle="black";
-		ctx.fillRect(0,0,canv.width,canv.height);
-		ctx.fillStyle="lime";
-		for(var i=0 ; i < trail.length;i++)
-		{
-			ctx.fillRect(trail[i].x*gs,trail[i].y*gs,gs-2,gs-2);
-			if(trail[i].x==px &&trail[i].y==py)
-			{
-				tail = 5;
-			}
-		}
-		trail.push({x:px,y:py});
-		while(trail.length>tail)
-		{
-			trail.shift();
-		}
-		if(ax == px && ay==py)
-		{
-			tail++;
-			ax = Math.floor(Math.random()*tc);
-			ay = Math.floor(Math.random()*tc);
-		}
+    <canvas id="gc" width="400" height="400"></canvas>
 
-		ctx.fillStyle="red";
-		ctx.fillRect(ax*gs,ay*gs,gs-2,gs-2);
+    <div class="controls">
+        <div class="btn up" onclick="changeDir(0,-1)">↑</div>
+        <div class="btn left" onclick="changeDir(-1,0)">←</div>
+        <div class="btn down" onclick="changeDir(0,1)">↓</div>
+        <div class="btn right" onclick="changeDir(1,0)">→</div>
+    </div>
 
-	}
+    <script type="text/javascript">
+        window.onload = function() {
+            canv = document.getElementById("gc");
+            ctx = canv.getContext("2d");
+            document.addEventListener("keydown", keyPush);
+            setInterval(game, 1000/15);
+        }
 
+        px = py = 10; // 蛇头位置
+        gs = tc = 20; // 栅格大小与数量
+        ax = ay = 15; // 苹果位置
+        xv = yv = 0;  // 速度
+        trail = [];
+        tail = 5;
 
-	function keyPush(evt){
-		switch(evt.keyCode){
-			case 37:
-				xv = -1 ;yv = 0 ;
-				break;
-			case 38:
-				xv = 0 ;yv = -1;
-				break;
-			case 39:
-				xv = 1 ; yv = 0;
-				break ;
-			case 40:
-				xv = 0 ; yv = 1;
-			break;
-		}	
-	}
-</script>
+        function game() {
+            px += xv;
+            py += yv;
+            // 穿墙逻辑
+            if(px < 0) px = tc-1;
+            if(px > tc-1) px = 0;
+            if(py < 0) py = tc-1;
+            if(py > tc-1) py = 0;
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canv.width, canv.height);
+
+            ctx.fillStyle = "lime";
+            for(var i=0; i<trail.length; i++) {
+                ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2);
+                if(trail[i].x == px && trail[i].y == py) {
+                    tail = 5; // 撞到自己，缩短
+                }
+            }
+            trail.push({x:px, y:py});
+            while(trail.length > tail) {
+                trail.shift();
+            }
+
+            if(ax == px && ay == py) {
+                tail++;
+                ax = Math.floor(Math.random()*tc);
+                ay = Math.floor(Math.random()*tc);
+            }
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
+        }
+
+        function keyPush(evt) {
+            switch(evt.keyCode) {
+                case 37: changeDir(-1,0); break;
+                case 38: changeDir(0,-1); break;
+                case 39: changeDir(1,0); break;
+                case 40: changeDir(0,1); break;
+            }
+        }
+
+        // 统一控制函数，方便手机和键盘调用
+        function changeDir(x, y) {
+            // 禁止“掉头”自杀逻辑（可选，目前原版允许掉头）
+            xv = x; yv = y;
+        }
+    </script>
+</body>
+</html>
